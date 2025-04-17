@@ -1,0 +1,789 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Workout Plan Generator</title>
+    <style>
+        /* General Styles */
+        body {
+            font-family: "Montserrat", sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #f0f4f8;
+            color: #2d3748;
+            text-align: center;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 500px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            text-align: left;
+        }
+
+        h1 {
+            color: rgb(213, 89, 89);
+            font-size: xx-large;
+            text-align: center;
+        }
+
+        .form-group {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .form-group label {
+            width: 40%;
+            font-weight: bold;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 55%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .btn {
+            background-color: rgb(213, 89, 89);
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            cursor: pointer;
+            margin-top: 15px;
+            width: 100%;
+        }
+
+        .btn:hover {
+            background-color: darkred;
+        }
+
+        #workoutPlanDisplay {
+            display: none;
+            margin-top: 20px;
+            padding: 15px;
+            background: #e6f7ff;
+            border-radius: 10px;
+        }
+
+        #workoutPlanDisplay h2 {
+            color: #3498db;
+        }
+        
+        .workout-day {
+            margin-bottom: 15px;
+            padding: 10px;
+            background: white;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .workout-day h3 {
+            color: rgb(213, 89, 89);
+            margin-top: 0;
+        }
+        
+        .exercise {
+            margin-bottom: 8px;
+        }
+        
+        .exercise-name {
+            font-weight: bold;
+        }
+        
+        .exercise-details {
+            font-size: 0.9em;
+            color: #555;
+            margin-left: 10px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1><b>Create Your Own Workout Plan Here</b></h1>
+
+    <div class="container">
+        <div class="form-group">
+            <label for="userName">Name:</label>
+            <input type="text" id="userName" required>
+        </div>
+
+        <div class="form-group">
+            <label for="userAge">Age:</label>
+            <input type="number" id="userAge" min="16" max="80" required>
+        </div>
+
+        <div class="form-group">
+            <label for="fitnessLevel">Fitness Level:</label>
+            <select id="fitnessLevel" required>
+                <option value="">Select Fitness Level</option>
+                <option value="beginner">Beginner</option>
+                <option value="intermediate">Intermediate</option>
+                <option value="advanced">Advanced</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="workoutGoal">Workout Goal:</label>
+            <select id="workoutGoal" required>
+                <option value="">Select Goal</option>
+                <option value="weight_loss">Weight Loss</option>
+                <option value="muscle_gain">Muscle Gain</option>
+                <option value="strength">Strength Training</option>
+                <option value="endurance">Endurance</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="weeklyWorkouts">Workouts per Week:</label>
+            <select id="weeklyWorkouts" required>
+                <option value="">Select Frequency</option>
+                <option value="2">2 Days</option>
+                <option value="3">3 Days</option>
+                <option value="4">4 Days</option>
+                <option value="5">5 Days</option>
+                <option value="6">6 Days</option>
+            </select>
+        </div>
+
+        <button class="btn" onclick="generateWorkoutPlan()">Generate Workout Plan</button>
+    </div>
+
+    <div id="workoutPlanDisplay">
+        <h2>Your Personalized Workout Plan</h2>
+        <div id="weeklyWorkoutPlan"></div>
+    </div>
+
+    <script>
+        // Exercise database
+        const exercises = {
+            cardio: {
+                beginner: [
+                    {name: "Brisk Walking", sets: "20-30 minutes", rest: "None", notes: "Maintain a pace where you can talk but not sing"},
+                    {name: "Cycling", sets: "20-30 minutes", rest: "None", notes: "Moderate pace, flat terrain"},
+                    {name: "Elliptical", sets: "15-20 minutes", rest: "None", notes: "Low resistance, focus on form"}
+                ],
+                intermediate: [
+                    {name: "Jogging", sets: "25-35 minutes", rest: "None", notes: "Comfortable pace, can speak in short sentences"},
+                    {name: "Stair Climber", sets: "15-20 minutes", rest: "None", notes: "Moderate pace, maintain good posture"},
+                    {name: "Rowing Machine", sets: "15-20 minutes", rest: "None", notes: "Focus on technique, moderate pace"}
+                ],
+                advanced: [
+                    {name: "Running", sets: "30-45 minutes", rest: "None", notes: "Steady pace, can speak a few words at a time"},
+                    {name: "Hill Sprints", sets: "10x30 sec", rest: "90 sec walk", notes: "Find a moderate incline, sprint up, walk down"},
+                    {name: "Swimming Intervals", sets: "20x50m", rest: "20 sec", notes: "Freestyle, moderate to fast pace"}
+                ]
+            },
+            hiit: {
+                beginner: [
+                    {name: "Bodyweight HIIT", sets: "30 sec work, 60 sec rest x 6", notes: "Exercises: jumping jacks, bodyweight squats, push-ups (knees if needed)"},
+                    {name: "Bike HIIT", sets: "30 sec fast, 90 sec easy x 5", notes: "Stationary bike, moderate resistance"},
+                    {name: "Walk/Jog Intervals", sets: "1 min jog, 2 min walk x 6", notes: "Gradual progression"}
+                ],
+                intermediate: [
+                    {name: "Tabata", sets: "20 sec work, 10 sec rest x 8", notes: "Choose 2 exercises (e.g., burpees, mountain climbers)"},
+                    {name: "Stair HIIT", sets: "30 sec up, 60 sec down x 6", notes: "Use stadium stairs or stair machine"},
+                    {name: "Circuit Training", sets: "45 sec work, 15 sec transition x 6", notes: "5-6 different exercises"}
+                ],
+                advanced: [
+                    {name: "Advanced Tabata", sets: "20 sec work, 10 sec rest x 16", notes: "4 exercises, 4 rounds each"},
+                    {name: "Sprint Intervals", sets: "30 sec sprint, 90 sec walk x 8", notes: "Track or treadmill, max effort sprints"},
+                    {name: "Complex HIIT", sets: "45 sec work, 15 sec rest x 10", notes: "Combination of cardio and bodyweight strength"}
+                ]
+            },
+            strength: {
+                upper: {
+                    beginner: [
+                        {name: "Push-ups", sets: "3x8-10", rest: "60 sec", notes: "Knees if needed, focus on form"},
+                        {name: "Dumbbell Shoulder Press", sets: "3x10-12", rest: "60 sec", notes: "Light weight, controlled movement"},
+                        {name: "Lat Pulldown", sets: "3x10-12", rest: "60 sec", notes: "Use cable machine or resistance bands"}
+                    ],
+                    intermediate: [
+                        {name: "Bench Press", sets: "4x8-10", rest: "90 sec", notes: "Barbell or dumbbells, focus on control"},
+                        {name: "Pull-ups", sets: "3x6-8", rest: "90 sec", notes: "Assisted if needed, full range of motion"},
+                        {name: "Dumbbell Lateral Raises", sets: "3x12-15", rest: "60 sec", notes: "Light to moderate weight"}
+                    ],
+                    advanced: [
+                        {name: "Weighted Pull-ups", sets: "4x6-8", rest: "120 sec", notes: "Add weight with belt or hold dumbbell"},
+                        {name: "Incline Dumbbell Press", sets: "4x8-10", rest: "90 sec", notes: "30-45 degree bench"},
+                        {name: "Arnold Press", sets: "4x10-12", rest: "90 sec", notes: "Rotational dumbbell press"}
+                    ]
+                },
+                lower: {
+                    beginner: [
+                        {name: "Bodyweight Squats", sets: "3x12-15", rest: "60 sec", notes: "Focus on depth and form"},
+                        {name: "Dumbbell Deadlifts", sets: "3x10-12", rest: "90 sec", notes: "Light weight, hinge at hips"},
+                        {name: "Step-ups", sets: "3x10 each leg", rest: "60 sec", notes: "Use bench or sturdy platform"}
+                    ],
+                    intermediate: [
+                        {name: "Barbell Squats", sets: "4x8-10", rest: "120 sec", notes: "Moderate weight, full range"},
+                        {name: "Romanian Deadlifts", sets: "4x8-10", rest: "120 sec", notes: "Barbell or dumbbells, hamstring focus"},
+                        {name: "Bulgarian Split Squats", sets: "3x10 each leg", rest: "90 sec", notes: "Dumbbells, controlled movement"}
+                    ],
+                    advanced: [
+                        {name: "Front Squats", sets: "5x5", rest: "180 sec", notes: "Barbell in front rack position"},
+                        {name: "Sumo Deadlifts", sets: "5x5", rest: "180 sec", notes: "Wide stance, focus on form"},
+                        {name: "Pistol Squats", sets: "3x5 each leg", rest: "120 sec", notes: "Assisted if needed, controlled"}
+                    ]
+                },
+                core: {
+                    beginner: [
+                        {name: "Plank", sets: "3x30 sec", rest: "30 sec", notes: "Maintain straight line from head to heels"},
+                        {name: "Dead Bug", sets: "3x10 each side", rest: "30 sec", notes: "Slow and controlled"},
+                        {name: "Bird Dog", sets: "3x10 each side", rest: "30 sec", notes: "Alternate arm/leg extensions"}
+                    ],
+                    intermediate: [
+                        {name: "Hanging Knee Raises", sets: "3x12-15", rest: "60 sec", notes: "Control the movement, no swinging"},
+                        {name: "Russian Twists", sets: "3x20 (10 each side)", rest: "45 sec", notes: "Add weight for difficulty"},
+                        {name: "Ab Wheel Rollouts", sets: "3x8-10", rest: "60 sec", notes: "Kneeling, control the movement"}
+                    ],
+                    advanced: [
+                        {name: "Dragon Flags", sets: "3x6-8", rest: "90 sec", notes: "Advanced core exercise, partial reps if needed"},
+                        {name: "Weighted Plank", sets: "3x60 sec", rest: "60 sec", notes: "Add weight plate on back"},
+                        {name: "L-sit Hold", sets: "3x20-30 sec", rest: "90 sec", notes: "Parallel bars or floor"}
+                    ]
+                }
+            },
+            flexibility: {
+                beginner: [
+                    {name: "Static Stretching", sets: "30 sec per muscle", notes: "Hamstrings, quads, chest, shoulders, back"},
+                    {name: "Cat-Cow", sets: "10 reps", notes: "Gentle spinal mobility"},
+                    {name: "Seated Forward Fold", sets: "30-60 sec", notes: "Reach for toes, keep back straight"}
+                ],
+                intermediate: [
+                    {name: "Dynamic Stretching", sets: "10 reps per movement", notes: "Leg swings, arm circles, torso twists"},
+                    {name: "Pigeon Pose", sets: "30-60 sec each side", notes: "Hip opener, modify as needed"},
+                    {name: "Thread the Needle", sets: "30 sec each side", notes: "Spinal rotation stretch"}
+                ],
+                advanced: [
+                    {name: "Yoga Flow", sets: "10-15 min", notes: "Sun salutations with smooth transitions"},
+                    {name: "Partner Stretching", sets: "Various", notes: "Assisted stretches for deeper range"},
+                    {name: "PNF Stretching", sets: "Contract-relax method", notes: "For major muscle groups"}
+                ]
+            }
+        };
+
+        function generateExerciseHTML(exercise) {
+            return `
+                <div class="exercise">
+                    <div class="exercise-name">${exercise.name}</div>
+                    <div class="exercise-details">
+                        <strong>Sets:</strong> ${exercise.sets}<br>
+                        ${exercise.rest ? `<strong>Rest:</strong> ${exercise.rest}<br>` : ''}
+                        <strong>Notes:</strong> ${exercise.notes}
+                    </div>
+                </div>
+            `;
+        }
+
+        function generateWorkoutPlan() {
+            let name = document.getElementById("userName").value;
+            let age = document.getElementById("userAge").value;
+            let fitnessLevel = document.getElementById("fitnessLevel").value;
+            let goal = document.getElementById("workoutGoal").value;
+            let workoutsPerWeek = document.getElementById("weeklyWorkouts").value;
+
+            if (!name || !age || !fitnessLevel || !goal || !workoutsPerWeek) {
+                alert("Please fill all fields before generating a plan!");
+                return;
+            }
+
+            let workoutPlan = "";
+            let days = parseInt(workoutsPerWeek);
+            
+            // Generate different plans based on goal and fitness level
+            if (goal === "weight_loss") {
+                workoutPlan = generateWeightLossPlan(fitnessLevel, days);
+            } else if (goal === "muscle_gain") {
+                workoutPlan = generateMuscleGainPlan(fitnessLevel, days);
+            } else if (goal === "strength") {
+                workoutPlan = generateStrengthPlan(fitnessLevel, days);
+            } else if (goal === "endurance") {
+                workoutPlan = generateEndurancePlan(fitnessLevel, days);
+            }
+
+            document.getElementById("workoutPlanDisplay").style.display = "block";
+            document.getElementById("weeklyWorkoutPlan").innerHTML = `
+                <p><strong>Name:</strong> ${name}</p>
+                <p><strong>Age:</strong> ${age}</p>
+                <p><strong>Fitness Level:</strong> ${fitnessLevel.charAt(0).toUpperCase() + fitnessLevel.slice(1)}</p>
+                <p><strong>Workout Goal:</strong> ${goal.replace("_", " ").toUpperCase()}</p>
+                <p><strong>Workouts per Week:</strong> ${workoutsPerWeek} Days</p>
+                <hr>
+                <p><strong>Your Customized Plan:</strong></p>
+                ${workoutPlan}
+                <hr>
+                <p><em>Notes:</em> Always warm up for 5-10 minutes before each workout and cool down/stretch afterward. Adjust weights and intensity based on your ability. Rest 1-2 minutes between sets unless specified otherwise.</p>
+            `;
+        }
+
+        function generateWeightLossPlan(level, days) {
+            let plan = "";
+            const cardioExercises = exercises.cardio[level];
+            const hiitExercises = exercises.hiit[level];
+            const strengthExercises = exercises.strength;
+            
+            // Common structure with variations based on days
+            if (days === 2) {
+                plan += `
+                    <div class="workout-day">
+                        <h3>Day 1: Full Body HIIT + Strength</h3>
+                        ${generateExerciseHTML(hiitExercises[0])}
+                        ${generateExerciseHTML(strengthExercises.upper[level][0])}
+                        ${generateExerciseHTML(strengthExercises.lower[level][0])}
+                        ${generateExerciseHTML(strengthExercises.core[level][0])}
+                    </div>
+                    <div class="workout-day">
+                        <h3>Day 2: Cardio + Core Focus</h3>
+                        ${generateExerciseHTML(cardioExercises[1])}
+                        ${generateExerciseHTML(strengthExercises.core[level][1])}
+                        ${generateExerciseHTML(strengthExercises.core[level][2])}
+                        ${generateExerciseHTML(exercises.flexibility[level][0])}
+                    </div>
+                `;
+            } else if (days === 3) {
+                plan += `
+                    <div class="workout-day">
+                        <h3>Day 1: HIIT Circuit</h3>
+                        ${generateExerciseHTML(hiitExercises[1])}
+                        ${generateExerciseHTML(strengthExercises.upper[level][1])}
+                        ${generateExerciseHTML(strengthExercises.lower[level][1])}
+                    </div>
+                    <div class="workout-day">
+                        <h3>Day 2: Steady State Cardio + Core</h3>
+                        ${generateExerciseHTML(cardioExercises[0])}
+                        ${generateExerciseHTML(strengthExercises.core[level][0])}
+                        ${generateExerciseHTML(strengthExercises.core[level][1])}
+                    </div>
+                    <div class="workout-day">
+                        <h3>Day 3: Full Body Strength</h3>
+                        ${generateExerciseHTML(strengthExercises.upper[level][0])}
+                        ${generateExerciseHTML(strengthExercises.lower[level][0])}
+                        ${generateExerciseHTML(strengthExercises.core[level][2])}
+                    </div>
+                `;
+            } else if (days === 4) {
+                plan += `
+                    <div class="workout-day">
+                        <h3>Day 1: HIIT + Upper Body</h3>
+                        ${generateExerciseHTML(hiitExercises[2])}
+                        ${generateExerciseHTML(strengthExercises.upper[level][0])}
+                        ${generateExerciseHTML(strengthExercises.upper[level][1])}
+                    </div>
+                    <div class="workout-day">
+                        <h3>Day 2: Lower Body + Core</h3>
+                        ${generateExerciseHTML(strengthExercises.lower[level][0])}
+                        ${generateExerciseHTML(strengthExercises.lower[level][1])}
+                        ${generateExerciseHTML(strengthExercises.core[level][0])}
+                    </div>
+                    <div class="workout-day">
+                        <h3>Day 3: Cardio Intervals</h3>
+                        ${generateExerciseHTML(cardioExercises[2])}
+                        ${generateExerciseHTML(strengthExercises.core[level][1])}
+                    </div>
+                    <div class="workout-day">
+                        <h3>Day 4: Full Body Circuit</h3>
+                        ${generateExerciseHTML(strengthExercises.upper[level][1])}
+                        ${generateExerciseHTML(strengthExercises.lower[level][1])}
+                        ${generateExerciseHTML(hiitExercises[0])}
+                    </div>
+                `;
+            } else if (days >= 5) {
+                plan += `
+                    <div class="workout-day">
+                        <h3>Day 1: HIIT + Upper Body</h3>
+                        ${generateExerciseHTML(hiitExercises[1])}
+                        ${generateExerciseHTML(strengthExercises.upper[level][0])}
+                        ${generateExerciseHTML(strengthExercises.upper[level][1])}
+                    </div>
+                    <div class="workout-day">
+                        <h3>Day 2: Lower Body Focus</h3>
+                        ${generateExerciseHTML(strengthExercises.lower[level][0])}
+                        ${generateExerciseHTML(strengthExercises.lower[level][1])}
+                        ${generateExerciseHTML(cardioExercises[1])}
+                    </div>
+                    <div class="workout-day">
+                        <h3>Day 3: Core + Cardio</h3>
+                        ${generateExerciseHTML(strengthExercises.core[level][0])}
+                        ${generateExerciseHTML(strengthExercises.core[level][1])}
+                        ${generateExerciseHTML(cardioExercises[0])}
+                    </div>
+                    <div class="workout-day">
+                        <h3>Day 4: Full Body Strength</h3>
+                        ${generateExerciseHTML(strengthExercises.upper[level][1])}
+                        ${generateExerciseHTML(strengthExercises.lower[level][1])}
+                        ${generateExerciseHTML(strengthExercises.core[level][2])}
+                    </div>
+                    <div class="workout-day">
+                        <h3>Day 5: HIIT Circuit</h3>
+                        ${generateExerciseHTML(hiitExercises[2])}
+                        ${generateExerciseHTML(strengthExercises.upper[level][2])}
+                        ${generateExerciseHTML(strengthExercises.lower[level][2])}
+                    </div>
+                `;
+                if (days === 6) {
+                    plan += `
+                        <div class="workout-day">
+                            <h3>Day 6: Active Recovery</h3>
+                            ${generateExerciseHTML(cardioExercises[0])}
+                            ${generateExerciseHTML(exercises.flexibility[level][0])}
+                            ${generateExerciseHTML(exercises.flexibility[level][1])}
+                        </div>
+                    `;
+                }
+            }
+            
+            return plan;
+        }
+
+        function generateMuscleGainPlan(level, days) {
+            let plan = "";
+            const upperExercises = exercises.strength.upper[level];
+            const lowerExercises = exercises.strength.lower[level];
+            const coreExercises = exercises.strength.core[level];
+            
+            if (days === 2) {
+                plan += `
+                    <div class="workout-day">
+                        <h3>Day 1: Upper Body Focus</h3>
+                        ${generateExerciseHTML(upperExercises[0])}
+                        ${generateExerciseHTML(upperExercises[1])}
+                        ${generateExerciseHTML(upperExercises[2])}
+                        ${generateExerciseHTML(coreExercises[0])}
+                    </div>
+                    <div class="workout-day">
+                        <h3>Day 2: Lower Body Focus</h3>
+                        ${generateExerciseHTML(lowerExercises[0])}
+                        ${generateExerciseHTML(lowerExercises[1])}
+                        ${generateExerciseHTML(lowerExercises[2])}
+                        ${generateExerciseHTML(coreExercises[1])}
+                    </div>
+                `;
+            } else if (days === 3) {
+                plan += `
+                    <div class="workout-day">
+                        <h3>Day 1: Push Day (Chest/Shoulders/Triceps)</h3>
+                        ${generateExerciseHTML(upperExercises[0])}
+                        ${generateExerciseHTML(upperExercises[1])}
+                        ${generateExerciseHTML(upperExercises[2])}
+                    </div>
+                    <div class="workout-day">
+                        <h3>Day 2: Pull Day (Back/Biceps)</h3>
+                        ${generateExerciseHTML(upperExercises[1])}
+                        ${generateExerciseHTML(upperExercises[2])}
+                        ${generateExerciseHTML(coreExercises[0])}
+                    </div>
+                    <div class="workout-day">
+                        <h3>Day 3: Leg Day</h3>
+                        ${generateExerciseHTML(lowerExercises[0])}
+                        ${generateExerciseHTML(lowerExercises[1])}
+                        ${generateExerciseHTML(lowerExercises[2])}
+                    </div>
+                `;
+            } else if (days === 4) {
+                plan += `
+                    <div class="workout-day">
+                        <h3>Day 1: Chest & Triceps</h3>
+                        ${generateExerciseHTML(upperExercises[0])}
+                        ${generateExerciseHTML(upperExercises[1])}
+                        ${generateExerciseHTML(coreExercises[0])}
+                    </div>
+                    <div class="workout-day">
+                        <h3>Day 2: Back & Biceps</h3>
+                        ${generateExerciseHTML(upperExercises[1])}
+                        ${generateExerciseHTML(upperExercises[2])}
+                        ${generateExerciseHTML(coreExercises[1])}
+                    </div>
+                    <div class="workout-day">
+                        <h3>Day 3: Legs</h3>
+                        ${generateExerciseHTML(lowerExercises[0])}
+                        ${generateExerciseHTML(lowerExercises[1])}
+                    </div>
+                    <div class="workout-day">
+                        <h3>Day 4: Shoulders & Core</h3>
+                        ${generateExerciseHTML(upperExercises[2])}
+                        ${generateExerciseHTML(coreExercises[0])}
+                        ${generateExerciseHTML(coreExercises[1])}
+                        ${generateExerciseHTML(coreExercises[2])}
+                    </div>
+                `;
+            } else if (days >= 5) {
+                plan += `
+                    <div class="workout-day">
+                        <h3>Day 1: Chest Focus</h3>
+                        ${generateExerciseHTML(upperExercises[0])}
+                        ${generateExerciseHTML(upperExercises[1])}
+                        ${generateExerciseHTML(coreExercises[0])}
+                    </div>
+                    <div class="workout-day">
+                        <h3>Day 2: Back Focus</h3>
+                        ${generateExerciseHTML(upperExercises[1])}
+                        ${generateExerciseHTML(upperExercises[2])}
+                        ${generateExerciseHTML(coreExercises[1])}
+                    </div>
+                    <div class="workout-day">
+                        <h3>Day 3: Legs - Quad Focus</h3>
+                        ${generateExerciseHTML(lowerExercises[0])}
+                        ${generateExerciseHTML(lowerExercises[1])}
+                    </div>
+                    <div class="workout-day">
+                        <h3>Day 4: Shoulders & Arms</h3>
+                        ${generateExerciseHTML(upperExercises[2])}
+                        ${generateExerciseHTML(upperExercises[1])}
+                        ${generateExerciseHTML(coreExercises[2])}
+                    </div>
+                    <div class="workout-day">
+                        <h3>Day 5: Legs - Hamstring/Glute Focus</h3>
+                        ${generateExerciseHTML(lowerExercises[1])}
+                        ${generateExerciseHTML(lowerExercises[2])}
+                    </div>
+                `;
+                if (days === 6) {
+                    plan += `
+                        <div class="workout-day">
+                            <h3>Day 6: Weak Point Training</h3>
+                            <p>Focus on your personal weak areas or repeat a favorite workout from the week.</p>
+                            ${generateExerciseHTML(exercises.flexibility[level][0])}
+                        </div>
+                    `;
+                }
+            }
+            
+            return plan;
+        }
+
+        function generateStrengthPlan(level, days) {
+            let plan = "";
+            const upperExercises = exercises.strength.upper[level];
+            const lowerExercises = exercises.strength.lower[level];
+            const coreExercises = exercises.strength.core[level];
+            
+            if (days === 2) {
+                plan += `
+                    <div class="workout-day">
+                        <h3>Day 1: Full Body Strength</h3>
+                        ${generateExerciseHTML(lowerExercises[0])}
+                        ${generateExerciseHTML(upperExercises[0])}
+                        ${generateExerciseHTML(coreExercises[0])}
+                    </div>
+                    <div class="workout-day">
+                        <h3>Day 2: Full Body Strength</h3>
+                        ${generateExerciseHTML(lowerExercises[1])}
+                        ${generateExerciseHTML(upperExercises[1])}
+                        ${generateExerciseHTML(coreExercises[1])}
+                    </div>
+                `;
+            } else if (days === 3) {
+                plan += `
+                    <div class="workout-day">
+                        <h3>Day 1: Lower Body Strength</h3>
+                        ${generateExerciseHTML(lowerExercises[0])}
+                        ${generateExerciseHTML(lowerExercises[1])}
+                        ${generateExerciseHTML(coreExercises[0])}
+                    </div>
+                    <div class="workout-day">
+                        <h3>Day 2: Upper Body Strength</h3>
+                        ${generateExerciseHTML(upperExercises[0])}
+                        ${generateExerciseHTML(upperExercises[1])}
+                        ${generateExerciseHTML(coreExercises[1])}
+                    </div>
+                    <div class="workout-day">
+                        <h3>Day 3: Full Body Power</h3>
+                        ${generateExerciseHTML(lowerExercises[2])}
+                        ${generateExerciseHTML(upperExercises[2])}
+                        ${generateExerciseHTML(coreExercises[2])}
+                    </div>
+                `;
+            } else if (days === 4) {
+                plan += `
+                    <div class="workout-day">
+                        <h3>Day 1: Squat Focus</h3>
+                        ${generateExerciseHTML(lowerExercises[0])}
+                        ${generateExerciseHTML(lowerExercises[1])}
+                        ${generateExerciseHTML(coreExercises[0])}
+                    </div>
+                    <div class="workout-day">
+                        <h3>Day 2: Press Focus</h3>
+                        ${generateExerciseHTML(upperExercises[0])}
+                        ${generateExerciseHTML(upperExercises[2])}
+                        ${generateExerciseHTML(coreExercises[1])}
+                    </div>
+                    <div class="workout-day">
+                        <h3>Day 3: Deadlift Focus</h3>
+                        ${generateExerciseHTML(lowerExercises[1])}
+                        ${generateExerciseHTML(lowerExercises[2])}
+                        ${generateExerciseHTML(coreExercises[2])}
+                    </div>
+                    <div class="workout-day">
+                        <h3>Day 4: Pull Focus</h3>
+                        ${generateExerciseHTML(upperExercises[1])}
+                        ${generateExerciseHTML(upperExercises[2])}
+                        ${generateExerciseHTML(coreExercises[0])}
+                    </div>
+                `;
+            } else if (days >= 5) {
+                plan += `
+                    <div class="workout-day">
+                        <h3>Day 1: Heavy Lower</h3>
+                        ${generateExerciseHTML(lowerExercises[0])}
+                        ${generateExerciseHTML(lowerExercises[1])}
+                        ${generateExerciseHTML(coreExercises[0])}
+                    </div>
+                    <div class="workout-day">
+                        <h3>Day 2: Heavy Upper</h3>
+                        ${generateExerciseHTML(upperExercises[0])}
+                        ${generateExerciseHTML(upperExercises[1])}
+                        ${generateExerciseHTML(coreExercises[1])}
+                    </div>
+                    <div class="workout-day">
+                        <h3>Day 3: Power Lower</h3>
+                        ${generateExerciseHTML(lowerExercises[2])}
+                        ${generateExerciseHTML(lowerExercises[1])}
+                        ${generateExerciseHTML(coreExercises[2])}
+                    </div>
+                    <div class="workout-day">
+                        <h3>Day 4: Power Upper</h3>
+                        ${generateExerciseHTML(upperExercises[2])}
+                        ${generateExerciseHTML(upperExercises[1])}
+                        ${generateExerciseHTML(coreExercises[0])}
+                    </div>
+                    <div class="workout-day">
+                        <h3>Day 5: Accessory Work</h3>
+                        <p>Focus on weak points and mobility work</p>
+                        ${generateExerciseHTML(exercises.flexibility[level][0])}
+                        ${generateExerciseHTML(exercises.flexibility[level][1])}
+                    </div>
+                `;
+                if (days === 6) {
+                    plan += `
+                        <div class="workout-day">
+                            <h3>Day 6: Active Recovery</h3>
+                            ${generateExerciseHTML(exercises.cardio[level][0])}
+                            ${generateExerciseHTML(exercises.flexibility[level][2])}
+                        </div>
+                    `;
+                }
+            }
+            
+            return plan;
+        }
+
+        function generateEndurancePlan(level, days) {
+            let plan = "";
+            const cardioExercises = exercises.cardio[level];
+            const hiitExercises = exercises.hiit[level];
+            const strengthExercises = exercises.strength;
+            
+            if (days === 2) {
+                plan += `
+                    <div class="workout-day">
+                        <h3>Day 1: Long Slow Distance</h3>
+                        ${generateExerciseHTML(cardioExercises[0])}
+                        ${generateExerciseHTML(strengthExercises.core[level][0])}
+                    </div>
+                    <div class="workout-day">
+                        <h3>Day 2: Interval Training</h3>
+                        ${generateExerciseHTML(hiitExercises[0])}
+                        ${generateExerciseHTML(strengthExercises.core[level][1])}
+                    </div>
+                `;
+            } else if (days === 3) {
+                plan += `
+                    <div class="workout-day">
+                        <h3>Day 1: Endurance Cardio</h3>
+                        ${generateExerciseHTML(cardioExercises[1])}
+                        ${generateExerciseHTML(strengthExercises.lower[level][0])}
+                    </div>
+                    <div class="workout-day">
+                        <h3>Day 2: Hill Repeats</h3>
+                        ${generateExerciseHTML(hiitExercises[1])}
+                        ${generateExerciseHTML(strengthExercises.core[level][0])}
+                    </div>
+                    <div class="workout-day">
+                        <h3>Day 3: Tempo Run</h3>
+                        ${generateExerciseHTML(cardioExercises[2])}
+                        ${generateExerciseHTML(strengthExercises.core[level][1])}
+                    </div>
+                `;
+            } else if (days === 4) {
+                plan += `
+                    <div class="workout-day">
+                        <h3>Day 1: Long Slow Distance</h3>
+                        ${generateExerciseHTML(cardioExercises[0])}
+                        ${generateExerciseHTML(strengthExercises.lower[level][0])}
+                    </div>
+                    <div class="workout-day">
+                        <h3>Day 2: Speed Intervals</h3>
+                        ${generateExerciseHTML(hiitExercises[2])}
+                        ${generateExerciseHTML(strengthExercises.core[level][0])}
+                    </div>
+                    <div class="workout-day">
+                        <h3>Day 3: Recovery Run</h3>
+                        ${generateExerciseHTML(cardioExercises[1])}
+                        ${generateExerciseHTML(strengthExercises.core[level][1])}
+                    </div>
+                    <div class="workout-day">
+                        <h3>Day 4: Hill Training</h3>
+                        ${generateExerciseHTML(hiitExercises[1])}
+                        ${generateExerciseHTML(strengthExercises.lower[level][1])}
+                    </div>
+                `;
+            } else if (days >= 5) {
+                plan += `
+                    <div class="workout-day">
+                        <h3>Day 1: Long Slow Distance</h3>
+                        ${generateExerciseHTML(cardioExercises[0])}
+                        ${generateExerciseHTML(strengthExercises.lower[level][0])}
+                    </div>
+                    <div class="workout-day">
+                        <h3>Day 2: Speed Work</h3>
+                        ${generateExerciseHTML(hiitExercises[2])}
+                        ${generateExerciseHTML(strengthExercises.core[level][0])}
+                    </div>
+                    <div class="workout-day">
+                        <h3>Day 3: Recovery Run</h3>
+                        ${generateExerciseHTML(cardioExercises[1])}
+                        ${generateExerciseHTML(strengthExercises.core[level][1])}
+                    </div>
+                    <div class="workout-day">
+                        <h3>Day 4: Hill Training</h3>
+                        ${generateExerciseHTML(hiitExercises[1])}
+                        ${generateExerciseHTML(strengthExercises.lower[level][1])}
+                    </div>
+                    <div class="workout-day">
+                        <h3>Day 5: Fartlek Training</h3>
+                        ${generateExerciseHTML(hiitExercises[0])}
+                        ${generateExerciseHTML(strengthExercises.core[level][2])}
+                    </div>
+                `;
+                if (days === 6) {
+                    plan += `
+                        <div class="workout-day">
+                            <h3>Day 6: Active Recovery</h3>
+                            ${generateExerciseHTML(cardioExercises[0])}
+                            ${generateExerciseHTML(exercises.flexibility[level][0])}
+                            ${generateExerciseHTML(exercises.flexibility[level][1])}
+                        </div>
+                    `;
+                }
+            }
+            
+            return plan;
+        }
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nutrition Plan | EliteFit Hub</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: white;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: rgb(213, 89, 89);
+            text-align: center;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input, select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        button {
+            background-color: rgb(213, 89, 89);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            width: 100%;
+        }
+        button:hover {
+            background-color: rgb(213, 89, 89);
+        }
+        .plan {
+            display: none;
+            margin-top: 30px;
+            border-top: 1px solid #eee;
+            padding-top: 20px;
+        }
+        .meal {
+            background-color: #f9f9f9;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 4px;
+        }
+        .meal h3 {
+            margin-top: 0;
+            color: rgb(213, 89, 89);
+        }
+        .food-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+        .calories {
+            font-weight: bold;
+            color: rgb(213, 89, 89);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Nutrition Plan Generator</h1>
+        
+        <div class="form-group">
+            <label for="diet-type">Diet Type</label>
+            <select id="diet-type">
+                <option value="vegetarian">Vegetarian</option>
+                <option value="eggetarian">Eggetarian</option>
+                <option value="non-vegetarian">Non-Vegetarian</option>
+            </select>
+        </div>
+        
+        <div class="form-group">
+            <label for="calories">Daily Calorie Target</label>
+            <input type="number" id="calories" placeholder="e.g., 2000">
+        </div>
+        
+        <button onclick="generatePlan()">Generate Nutrition Plan</button>
+        
+        <div id="plan" class="plan">
+            <h2>Your Daily Nutrition Plan</h2>
+            <div id="breakfast" class="meal">
+                <h3>Breakfast</h3>
+                <div id="breakfast-items"></div>
+            </div>
+            <div id="lunch" class="meal">
+                <h3>Lunch</h3>
+                <div id="lunch-items"></div>
+            </div>
+            <div id="snacks" class="meal">
+                <h3>Snacks</h3>
+                <div id="snacks-items"></div>
+            </div>
+            <div id="dinner" class="meal">
+                <h3>Dinner</h3>
+                <div id="dinner-items"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const mealDB = {
+            vegetarian: {
+                breakfast: [
+                    { name: "Oatmeal with fruits", calories: 350, details: "1 cup oats, 1 banana, 1 tbsp honey" },
+                    { name: "Poha with peanuts", calories: 300, details: "1.5 cups poha, 1 tbsp peanuts, veggies" },
+                    { name: "Vegetable sandwich", calories: 320, details: "2 slices bread with cucumber, tomato, cheese" }
+                ],
+                lunch: [
+                    { name: "Dal + Rice + Sabzi", calories: 450, details: "1 cup dal, 1 cup rice, 1 cup mixed vegetables" },
+                    { name: "Roti + Sabzi + Curd", calories: 400, details: "2 rotis, 1 cup vegetable curry, 1/2 cup curd" },
+                    { name: "Vegetable pulao", calories: 380, details: "1.5 cups pulao with raita" }
+                ],
+                snacks: [
+                    { name: "Fruit salad", calories: 150, details: "1 cup mixed seasonal fruits" },
+                    { name: "Roasted makhana", calories: 120, details: "30g makhana with spices" },
+                    { name: "Green smoothie", calories: 180, details: "Spinach, banana, almond milk" }
+                ],
+                dinner: [
+                    { name: "Khichdi", calories: 350, details: "1.5 cups khichdi with ghee" },
+                    { name: "Daliya", calories: 300, details: "1.5 cups cooked daliya with veggies" },
+                    { name: "Vegetable soup + toast", calories: 320, details: "1 bowl soup, 2 slices bread" }
+                ]
+            },
+            eggetarian: {
+                breakfast: [
+                    { name: "Scrambled eggs + toast", calories: 350, details: "2 eggs, 2 slices whole wheat bread" },
+                    { name: "Omelette with veggies", calories: 300, details: "2 eggs with onions, tomatoes, capsicum" },
+                    { name: "Boiled eggs + fruits", calories: 280, details: "2 eggs, 1 apple or banana" }
+                ],
+                lunch: [
+                    { name: "Egg curry + rice", calories: 450, details: "2 eggs in curry, 1 cup rice" },
+                    { name: "Egg fried rice", calories: 400, details: "1.5 cups rice with 1 egg and veggies" },
+                    { name: "Egg sandwich", calories: 380, details: "2 slices bread with 2 boiled eggs" }
+                ],
+                snacks: [
+                    { name: "Egg muffins", calories: 200, details: "2 small egg muffins with veggies" },
+                    { name: "Boiled eggs", calories: 140, details: "2 boiled eggs with salt" },
+                    { name: "Egg white salad", calories: 150, details: "3 egg whites with veggies" }
+                ],
+                dinner: [
+                    { name: "Egg bhurji + roti", calories: 350, details: "2 eggs scrambled, 2 rotis" },
+                    { name: "Egg drop soup", calories: 300, details: "1 bowl soup with 1 egg" },
+                    { name: "Poached eggs + toast", calories: 320, details: "2 eggs, 2 slices bread" }
+                ]
+            },
+            "non-vegetarian": {
+                breakfast: [
+                    { name: "Chicken sandwich", calories: 400, details: "2 slices bread, 100g chicken" },
+                    { name: "Eggs + bacon", calories: 450, details: "2 eggs, 2 bacon strips" },
+                    { name: "Greek yogurt + nuts", calories: 350, details: "1 cup yogurt, 30g nuts" }
+                ],
+                lunch: [
+                    { name: "Grilled chicken + rice", calories: 500, details: "150g chicken, 1 cup rice" },
+                    { name: "Fish curry + roti", calories: 450, details: "150g fish, 2 rotis" },
+                    { name: "Chicken salad", calories: 400, details: "150g chicken with greens" }
+                ],
+                snacks: [
+                    { name: "Chicken wrap", calories: 300, details: "1 wrap with 80g chicken" },
+                    { name: "Tuna salad", calories: 250, details: "1/2 cup with 50g tuna" },
+                    { name: "Protein shake", calories: 200, details: "1 scoop whey with milk" }
+                ],
+                dinner: [
+                    { name: "Grilled fish + veggies", calories: 450, details: "150g fish, 1 cup vegetables" },
+                    { name: "Chicken soup", calories: 350, details: "1 bowl with 100g chicken" },
+                    { name: "Stir-fried chicken", calories: 400, details: "150g chicken with bell peppers" }
+                ]
+            }
+        };
+
+        function generatePlan() {
+            const dietType = document.getElementById('diet-type').value;
+            const targetCalories = parseInt(document.getElementById('calories').value);
+            
+            if (!targetCalories || targetCalories < 1000) {
+                alert('Please enter a valid calorie target (minimum 1000)');
+                return;
+            }
+            
+            // Get random meals for each category
+            const breakfast = getRandomMeal(mealDB[dietType].breakfast);
+            const lunch = getRandomMeal(mealDB[dietType].lunch);
+            const snacks = getRandomMeal(mealDB[dietType].snacks);
+            const dinner = getRandomMeal(mealDB[dietType].dinner);
+            
+            // Calculate total calories
+            const totalCalories = breakfast.calories + lunch.calories + snacks.calories + dinner.calories;
+            
+            // Adjust meals to match target calories
+            const adjustmentFactor = targetCalories / totalCalories;
+            
+            // Display the plan
+            displayMeal('breakfast-items', breakfast, adjustmentFactor);
+            displayMeal('lunch-items', lunch, adjustmentFactor);
+            displayMeal('snacks-items', snacks, adjustmentFactor);
+            displayMeal('dinner-items', dinner, adjustmentFactor);
+            
+            // Show the plan
+            document.getElementById('plan').style.display = 'block';
+        }
+
+        function getRandomMeal(meals) {
+            return meals[Math.floor(Math.random() * meals.length)];
+        }
+
+        function displayMeal(elementId, meal, adjustmentFactor) {
+            const adjustedCalories = Math.round(meal.calories * adjustmentFactor);
+            const container = document.getElementById(elementId);
+            container.innerHTML = `
+                <div class="food-item">
+                    <div>
+                        <div class="food-name">${meal.name}</div>
+                        <div class="food-details">${meal.details}</div>
+                    </div>
+                    <div class="calories">${adjustedCalories} kcal</div>
+                </div>
+            `;
+        }
+    </script>
+</body>
+</html>

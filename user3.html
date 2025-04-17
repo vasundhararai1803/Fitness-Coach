@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rahul's Weight Loss Journey | EliteFit Hub</title>
+    <style>
+        /* General Styles */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f7f7f7;
+            color: #333;
+        }
+
+        /* Container */
+        .container {
+            width: 80%;
+            margin: 50px auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Content Layout */
+        .content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        /* Left Side - Text */
+        .text {
+            width: 55%;
+            text-align: left;
+        }
+
+        h1 {
+            color: #3498db;
+        }
+
+        p {
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+
+        /* Right Side - Image */
+        .image {
+            width: 40%;
+        }
+
+        .image img {
+            width: 100%;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Back Button */
+        .back-btn {
+            background: #3498db;
+            color: white;
+            padding: 10px 20px;
+            font-size: 1rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 15px;
+        }
+
+        .back-btn:hover {
+            background: darkblue;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .content {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .text, .image {
+                width: 100%;
+            }
+
+            .image {
+                margin-top: 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <!-- Rahul's Story Section -->
+        <div class="content">
+            <div class="text">
+                <h1>Rahul Kumar's Weight Loss Journey</h1>
+                <p>
+                    Hi, I am <strong>Rahul Kumar</strong>, and my weight loss journey has been full of challenges.  
+                    For years, I struggled with unhealthy eating habits and lack of motivation.  
+                    But everything changed when I joined <strong>EliteFit Hub</strong>.
+                </p>
+                <p>
+                    With <strong>customized workout plans</strong>, a <strong>nutritional guide</strong>, and <strong>constant motivation</strong>,  
+                    I was able to lose <strong>15 kg</strong> in just a few months! The structured approach helped me  
+                    build a sustainable <strong>healthy lifestyle</strong>.
+                </p>
+                <p>
+                    Thanks to <strong>EliteFit Hub</strong>, I feel more confident and energetic than ever!
+                </p>
+                <button class="back-btn" onclick="goBack()">Go Back</button>
+            </div>
+
+            <div class="image">
+                <img src="4th.jpeg" alt="Rahul Kumar Before and After">
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function goBack() {
+            window.history.back();
+        }
+    </script>
+
+</body>
+
+</html>

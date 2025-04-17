@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EliteFit Hub - Personalized Workout Planning Platform</title>
+    <link rel="stylesheet" href="project.css">
+</head>
+
+<body>
+    <!-- Header Section -->
+    <header>
+        <div class="container">
+            <nav class="navbar">
+                <a href="#" class="logo" style="color: rgb(255, 255, 255);font-size: xx-large;">EliteFit Hub</a>
+                <ul class="nav-menu">
+                    <li><a href="#features" class="nav-link"> AI Assistant</a></li> 
+                    <li><a href="bmi.html" class="nav-link">Bmi Calculator</a></li>
+                    <li><a href="#features" class="nav-link"> Workout Planning </a></li>
+                    <li><a href="#testimonials" class="nav-link">Reviews</a></li>
+                    <li><a href="registration form.html" class="nav-link">SignUp</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="hero-title">Personalized Workout Planning Powered by AI</h1>
+                <p class="hero-subtitle">Transform your fitness journey with cutting-edge AI technology tailored to your
+                    unique body, goals, and fitness level.</p>
+                <div class="hero-buttons">
+                    <a href="#features" class="btn btn-primary">Get Started for Free</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features" id="features">
+        <div class="container">
+            <h1 class="section-title" style="color: rgb(255, 255, 255);font-size: xxx-large;">Primary Attributes</h1>
+            <div class="features-grid">
+                <div class="feature-card" onclick="openWorkoutPlanModal()">
+                    <div class="feature-img">
+                        <img src="pic2.jpeg.jpg" class="feature-img" style="height: 280px; width: 290px;">
+                    </div>
+                    <div class="feature-content">
+                        <h3 class="feature-title">AI-Driven Workout Planning</h3>
+                        <p class="feature-desc" style="color: white;">Generate personalized workout plans based on your body metrics, fitness
+                            goals, and experience level.</p>
+                        <button style="background-color: rgb(0, 0, 0); height: 54px; width: 220px; border-radius: 50px;"><a href="plan.html" class="feature-btn" style="color: rgb(255, 255, 255);font-size: large;">Create Workout Plan</a></button>
+                    </div>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-img">
+                        <img src="pic1.jpeg.jpg" class="feature-img" style="height: 280px; width: 290px;">
+                    </div>
+                    <div class="feature-content">
+                        <h3 class="feature-title">Fitness AI Assistant</h3>
+                        <p class="feature-desc" style="color: white;">Get instant answers to your fitness questions and personalized guidance
+                            with our advanced AI coach.</p>
+                        <button class="chatbot-toggle" style="background-color: rgb(0, 0, 0); height: 54px; width: 220px; border-radius: 50px;color: rgb(255, 255, 255);font-size: large; font-weight: bold;margin-top: 25px;" onclick="toggleChatbot()">Talk To Me 💬</button>
+                    </div>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-img">
+                        <img src="3rd.jpg" class="feature-img" style="height: 280px; width: 290px;">
+                    </div>
+                    <div class="feature-content">
+                        <h3 class="feature-title">Personalized Diet Plan</h3>
+                        <p class="feature-desc" style="color: white;">Create a customized diet plan based on your dietary preferences and caloric needs.</p>
+                        <button style="background-color: rgb(0, 0, 0); height: 50px; width: 220px; border-radius: 50px;"><a href="diet plan.html" class="feature-btn" style="color: rgb(255, 255, 255);font-size: large;">Create Diet Plan</a></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section class="testimonials" id="testimonials">
+        <div class="container">
+            <h2 class="section-title" style="color: rgb(255, 255, 255);font-size: xxx-large;">User Experiences</h2>
+            <div class="testimonial-grid">
+                <div class="testimonial">
+                    <p class="testimonial-text" style="color: rgb(255, 255, 255);"><a href="user1.html" style="color: white;">"EliteFit Hub helped me lose 15 kgs and completely transform my body. The
+                        personalized workouts are incredible!"</a></p>
+                    <div class="testimonial-author">
+                        <div class="author-avatar"><img src="5th.jpg" style="height: 280px; width: 290px;" class="img1"></div>
+                        <div>
+                            <div class="author-name" style="color: white;">Amit Verma</div>
+                            <div class="author-role" style="color: white;">Software Engineer</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="testimonial">
+                    <p class="testimonial-text" style="color: white;"><a href="user2.html" style="color: white;">As a beginner, EliteFit Hub made my fitness journey smooth and motivating. The
+                        AI guidance is spot on!"</a></p>
+                    <div class="testimonial-author">
+                        <div class="author-avatar"><img src="6th.jpg" style="height: 280px; width: 290px;" class="img2"></div>
+                        <div>
+                            <div class="author-name" style="color: white;">Sneha Sharma</div>
+                            <div class="author-role" style="color: white;">Data Scientist</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="testimonial">
+                    <p class="testimonial-text" style="color: white;"><a href="user3.html" style="color: white;">"The AI coach keeps me accountable and helps me push my limits. It's
+                        like having a personal trainer 24/7!"</a></p>
+                    <div class="testimonial-author">
+                        <div class="author-avatar"><img src="4th.jpeg" style="height: 280px; width: 290px;" class="img3"></div>
+                        <div>
+                            <div class="author-name" style="color: white;">Rahul Kumar</div>
+                            <div class="author-role" style="color: white;">Marketing Professional</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <h4>EliteFit Hub</h4>
+                    <ul class="footer-links">
+                        <li><a href="#" class="footer-link">About Us</a></li>
+                        <li><a href="#features" class="footer-link"> AI Assistant</a></li>
+                        <li><a href="#features" class="footer-link"> Workout Planning </a></li>
+                        <li><a href="#testimonials" class="footer-link">Reviews</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-col">
+                    <h4>Workout Types</h4>
+                    <ul class="footer-links">
+                        <li><a href="#features" class="footer-link">Weight Loss</a></li>
+                        <li><a href="#features" class="footer-link">Muscle Gain</a></li>
+                        <li><a href="#features" class="footer-link">Strength Training</a></li>
+                        <li><a href="#features" class="footer-link">Cardio</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Connect With Us</h4>
+                    <ul class="footer-links">
+                        <li><a href="https://www.instagram.com/" class="footer-link">Instagram</a></li>
+                        <li><a href="https://in.linkedin.com/" class="footer-link">LinkedIn</a></li>
+                        <li><a href="https://www.youtube.com/" class="footer-link">YouTube</a></li>
+                        <li><a href="https://web.whatsapp.com/" class="footer-link">WhatsApp</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </footer>
+   <!-- <script src="chat.js"></script> -->
+</body>
+
+</html>

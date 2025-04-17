@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Amit's Workout Consistency | EliteFit Hub</title>
+    <style>
+        /* General Styles */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f7f7f7;
+            color: #333;
+        }
+
+        /* Container */
+        .container {
+            width: 80%;
+            margin: 50px auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Content Layout */
+        .content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        /* Left Side - Text */
+        .text {
+            width: 55%;
+            text-align: left;
+        }
+
+        h1 {
+            color: #3498db;
+        }
+
+        p {
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+
+        /* Right Side - Image */
+        .image {
+            width: 40%;
+        }
+
+        .image img {
+            width: 100%;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Back Button */
+        .back-btn {
+            background: #3498db;
+            color: white;
+            padding: 10px 20px;
+            font-size: 1rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 15px;
+        }
+
+        .back-btn:hover {
+            background: darkblue;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .content {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .text, .image {
+                width: 100%;
+            }
+
+            .image {
+                margin-top: 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <!-- Amit's Story Section -->
+        <div class="content">
+            <div class="text">
+                <h1>Amit Verma's Fitness Consistency</h1>
+                <p>
+                    Hi, I am <strong>Amit Verma</strong>, and staying consistent with workouts was always a challenge for me.  
+                    I would start strong but lose motivation after a few weeks—until I joined <strong>EliteFit Hub</strong>.
+                </p>
+                <p>
+                    With structured workout plans, expert guidance, and a supportive community, I built a  
+                    habit of <strong>regular exercise</strong>. Now, training <strong>5 days a week</strong> has become a part of my lifestyle!
+                </p>
+                <p>
+                    Thanks to <strong>EliteFit Hub</strong>, I have achieved my fitness goals and built long-term discipline.
+                </p>
+                <button class="back-btn" onclick="goBack()">Go Back</button>
+            </div>
+
+            <div class="image">
+                <img src="5th.jpg" alt="Amit Verma Working Out">
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function goBack() {
+            window.history.back();
+        }
+    </script>
+
+</body>
+
+</html>
